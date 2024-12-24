@@ -3,7 +3,7 @@ import { useApiKeysStore } from './apiKeysStore.ts';
 
 function isSafeOrigin(url: string): boolean {
   const localUrl = /^http:\/\/localhost:\d{4}$/;
-  const prodUrl = /^https:\/\/[a-zA-Z]{3,10}\.p-kin\.com$/;
+  const prodUrl = /^https:\/\/[a-zA-Z0-9]{3,10}\.p-kin\.com$/;
 
   const isLocal = localUrl.test(window.location.origin);
   return isLocal ? localUrl.test(url) : prodUrl.test(url);
@@ -24,9 +24,8 @@ export const usePostMessengerStore = defineStore('postMessenger', () => {
   sendMessageToHost('weather.handshake');
 
   window.addEventListener('message', event => {
-    console.log('[WEATHER] message', event.origin, window.location.origin);
     if (
-      // event.origin === window.location.origin ||
+      event.origin === window.location.origin ||
       !isSafeOrigin(event.origin) ||
       event.data.context !== START_CONTEXT
     ) {
