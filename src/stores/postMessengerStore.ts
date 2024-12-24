@@ -62,6 +62,7 @@ export const usePostMessengerStore = defineStore('postMessenger', () => {
   }) {
     console.log('[WEATHER] Received api keys:', locationApiKey, weatherApiKey);
     setApiKeys(weatherApiKey, locationApiKey);
+    sendMessageToHost('weather.infoNotification', 'Weather widget setup successful.');
   }
 
   return { sendMessageToHost };
