@@ -15,10 +15,10 @@ export const useApiKeysStore = defineStore('apiKeys', () => {
 
   const weatherApiKey = ref<string | undefined>();
   const locationApiKey = ref<string | undefined>();
-  const initialized = ref(false);
+  const isInitialized = ref(false);
 
   const status = computed(() => {
-    if (!initialized.value) {
+    if (!isInitialized.value) {
       return ApiKeysState.INITIALIZING;
     }
     if (!weatherApiKey.value && !locationApiKey.value) {
@@ -35,7 +35,13 @@ export const useApiKeysStore = defineStore('apiKeys', () => {
   function setApiKeys(weather: string | undefined, location: string | undefined): void {
     weatherApiKey.value = weather;
     locationApiKey.value = location;
-    initialized.value = true;
+    isInitialized.value = true;
+  }
+
+  function updateIfNotFramed(): void {
+    setTimeout(() => {
+      isInitialized.value = true;
+    }, 500);
   }
 
   watch([weatherApiKey, locationApiKey], () => {
@@ -53,5 +59,5 @@ export const useApiKeysStore = defineStore('apiKeys', () => {
     );
   }
 
-  return { weatherApiKey, locationApiKey, status, setApiKeys };
+  return { weatherApiKey, locationApiKey, status, setApiKeys, updateIfNotFramed };
 });

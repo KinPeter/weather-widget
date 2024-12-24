@@ -12,19 +12,21 @@ function isSafeOrigin(url: string): boolean {
 const START_CONTEXT = 'START_V4';
 
 export const usePostMessengerStore = defineStore('postMessenger', () => {
+  const { setApiKeys, updateIfNotFramed } = useApiKeysStore();
+
   if (window.self === window.top) {
     console.log('[WEATHER] Not in an iframe, exiting PostMessengerStore');
+    updateIfNotFramed();
     return;
   }
-
-  const { setApiKeys } = useApiKeysStore();
 
   console.log('[WEATHER] PostMessengerStore is UP');
   sendMessageToHost('weather.handshake');
 
   window.addEventListener('message', event => {
+    console.log('[WEATHER] message', event.origin, window.location.origin);
     if (
-      event.origin === window.location.origin ||
+      // event.origin === window.location.origin ||
       !isSafeOrigin(event.origin) ||
       event.data.context !== START_CONTEXT
     ) {
