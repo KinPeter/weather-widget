@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import { ApiKeysState, useApiKeysStore } from '../stores/apiKeysStore.ts';
+import { usePostMessengerStore } from '../stores/postMessengerStore.ts';
 import WeatherSummary from '../components/weather/WeatherSummary.vue';
 import NotAvailable from '../components/common/NotAvailable.vue';
 
-const { status } = useApiKeysStore();
+const apiKeys = useApiKeysStore();
+usePostMessengerStore();
 </script>
 
 <template>
-  <main v-if="status === ApiKeysState.READY">
+  <main v-if="apiKeys.status === ApiKeysState.READY">
     <RouterLink to="/location">Location</RouterLink>
     <WeatherSummary />
   </main>
   <main v-else>
-    <NotAvailable :status="status" />
+    <NotAvailable :status="apiKeys.status" />
   </main>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ApiKeysState } from '../../stores/apiKeysStore.ts';
+import { ApiKeysState } from '../../stores/apiKeysStore.ts';
 
 defineProps<{
   status: ApiKeysState;
@@ -7,9 +7,12 @@ defineProps<{
 </script>
 
 <template>
-  <div>
+  <div v-if="status !== ApiKeysState.INITIALIZING">
     <h1>Service is not available</h1>
     <h2>Reason: {{ status.replace(/_/g, ' ').toLowerCase() }}</h2>
+  </div>
+  <div v-else>
+    <h1>Initializing...</h1>
   </div>
 </template>
 
