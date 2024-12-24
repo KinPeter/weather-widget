@@ -59,5 +59,5 @@ export const useApiKeysStore = defineStore('apiKeys', () => {
     );
   }
 
-  return { weatherApiKey, locationApiKey, status, setApiKeys, updateIfNotFramed };
+  return { weatherApiKey, locationApiKey, isInitialized, status, setApiKeys, updateIfNotFramed };
 });

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ApiKeysState } from '../../stores/apiKeysStore.ts';
+import { capitalize } from '../../utils/strings.ts';
 
 defineProps<{
   status: ApiKeysState;
@@ -9,7 +10,7 @@ defineProps<{
 <template>
   <div v-if="status !== ApiKeysState.INITIALIZING">
     <h1>Service is not available</h1>
-    <h2>Reason: {{ status.replace(/_/g, ' ').toLowerCase() }}</h2>
+    <h2>Reason: {{ capitalize(status.replace(/_/g, ' ')) }}</h2>
   </div>
   <div v-else>
     <h1>Initializing...</h1>

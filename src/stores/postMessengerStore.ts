@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { useApiKeysStore } from './apiKeysStore.ts';
+import { ref } from 'vue';
 
 function isSafeOrigin(url: string): boolean {
   const localUrl = /^http:\/\/localhost:\d{4}$/;
@@ -13,13 +14,15 @@ const START_CONTEXT = 'START_V4';
 
 export const usePostMessengerStore = defineStore('postMessenger', () => {
   const { setApiKeys, updateIfNotFramed } = useApiKeysStore();
+  const isFramed = ref(false);
 
   if (window.self === window.top) {
     console.log('[WEATHER] Not in an iframe, exiting PostMessengerStore');
     updateIfNotFramed();
-    return;
+    return { sendMessageToHost };
   }
 
+  isFramed.value = true;
   console.log('[WEATHER] PostMessengerStore is UP');
   sendMessageToHost('weather.handshake');
 
@@ -44,6 +47,9 @@ export const usePostMessengerStore = defineStore('postMessenger', () => {
   });
 
   function sendMessageToHost(topic: string, payload?: unknown): void {
+    if (!isFramed.value) {
+      return;
+    }
     window.parent.postMessage(
       {
         context: START_CONTEXT,
