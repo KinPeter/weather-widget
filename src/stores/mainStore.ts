@@ -19,7 +19,7 @@ export const useMainStore = defineStore('main', () => {
   const location = ref<string>('');
   const weather = ref<Weather | undefined>();
   const loading = ref<boolean>(false);
-  const disabled = ref<boolean>(false);
+  const geolocationDisabled = ref<boolean>(false);
   const locationApiKey = ref<string | undefined>();
   const weatherApiKey = ref<string | undefined>();
   const coords = ref<GeolocationCoordinates | undefined>();
@@ -41,10 +41,13 @@ export const useMainStore = defineStore('main', () => {
           position => getLocation(position.coords),
           err => {
             loading.value = false;
+            geolocationDisabled.value = true;
             console.log('[WEATHER] Geolocation error', err);
             sendMessageToHost('weather.errorNotification', `Geolocation error: ${err.message}`);
           }
         );
+      } else {
+        geolocationDisabled.value = true;
       }
     },
     { immediate: true }
@@ -52,6 +55,10 @@ export const useMainStore = defineStore('main', () => {
 
   async function getLocation(coords: GeolocationCoordinates): Promise<void> {
     if (!locationApiKey.value) return;
+    if (!coords?.latitude || !coords?.longitude) {
+      geolocationDisabled.value = true;
+      return;
+    }
     const savedLocationForCoordinates: LocationIqResponse | null =
       getSavedLocationForCoords(coords);
     if (savedLocationForCoordinates) {
@@ -89,10 +96,9 @@ export const useMainStore = defineStore('main', () => {
     saveLocationForCoords(locationResponse, receivedCoords);
     coords.value = receivedCoords;
     const { city, district, country, town, village, region, state } = locationResponse.address;
-    const locationText = city
+    location.value = city
       ? city + (district ? `, ${district}` : '')
       : (village ?? town ?? state ?? region ?? country ?? 'Unknown location :(');
-    location.value = locationText;
     fetchWeather();
     setFetchTimer();
   }
@@ -133,5 +139,5 @@ export const useMainStore = defineStore('main', () => {
     fetchTimer.value = setInterval(() => fetchWeather(), 1000 * 60 * 60);
   }
 
-  return { location, weather, loading, disabled };
+  return { location, weather, loading, geolocationDisabled };
 });
