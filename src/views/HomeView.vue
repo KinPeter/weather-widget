@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ApiKeysState, useApiKeysStore } from '../stores/apiKeysStore.ts';
-import WeatherSummary from '../components/weather/WeatherSummary.vue';
+import CurrentWeather from '../components/weather/CurrentWeather.vue';
 import LoadingIndicator from '../components/common/LoadingIndicator.vue';
 import NotAvailable from '../components/common/NotAvailable.vue';
 import NoGeolocation from '../components/common/NoGeolocation.vue';
@@ -22,8 +22,7 @@ watch([location, weather], () => {
     <LoadingIndicator />
   </main>
   <main v-else-if="apiKeys.status === ApiKeysState.READY && !geolocationDisabled">
-    <RouterLink to="/location">Location</RouterLink>
-    <WeatherSummary />
+    <CurrentWeather />
   </main>
   <main v-else-if="geolocationDisabled">
     <NoGeolocation />
