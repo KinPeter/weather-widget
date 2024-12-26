@@ -90,11 +90,11 @@ const thresholds = {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    flex-wrap: wrap;
 
     .current-left {
       p {
         margin: 0 0 0.25rem;
+        white-space: pre-wrap;
         &:last-child {
           margin: 0;
         }
