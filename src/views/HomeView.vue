@@ -5,16 +5,13 @@ import LoadingIndicator from '../components/common/LoadingIndicator.vue';
 import NotAvailable from '../components/common/NotAvailable.vue';
 import NoGeolocation from '../components/common/NoGeolocation.vue';
 import { useMainStore } from '../stores/mainStore.ts';
-import { watch } from 'vue';
 import { storeToRefs } from 'pinia';
+import DailyWeather from '../components/weather/DailyWeather.vue';
+import HourlyWeather from '../components/weather/HourlyWeather.vue';
 
 const apiKeys = useApiKeysStore();
 const store = useMainStore();
-const { loading, location, weather, geolocationDisabled } = storeToRefs(store);
-
-watch([location, weather], () => {
-  console.log('watch store', location.value, weather.value);
-});
+const { loading, geolocationDisabled } = storeToRefs(store);
 </script>
 
 <template>
@@ -23,6 +20,8 @@ watch([location, weather], () => {
   </main>
   <main v-else-if="apiKeys.status === ApiKeysState.READY && !geolocationDisabled">
     <CurrentWeather />
+    <DailyWeather />
+    <HourlyWeather />
   </main>
   <main v-else-if="geolocationDisabled">
     <NoGeolocation />
