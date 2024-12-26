@@ -62,7 +62,7 @@ export const useMainStore = defineStore('main', () => {
     const savedLocationForCoordinates: LocationIqResponse | null =
       getSavedLocationForCoords(coords);
     if (savedLocationForCoordinates) {
-      onGetLocation(savedLocationForCoordinates, coords);
+      onLocationReceived(savedLocationForCoordinates, coords);
       return;
     }
     try {
@@ -80,8 +80,8 @@ export const useMainStore = defineStore('main', () => {
       if (!res.ok) {
         throw new Error(json.message);
       }
-      console.log('Geolocation success', json);
-      onGetLocation(json, coords);
+      console.log('[WEATHER] Geolocation success', json);
+      onLocationReceived(json, coords);
     } catch (e) {
       sendMessageToHost('weather.errorNotification', `Geolocation error: ${(e as Error).message}`);
     } finally {
@@ -89,7 +89,7 @@ export const useMainStore = defineStore('main', () => {
     }
   }
 
-  function onGetLocation(
+  function onLocationReceived(
     locationResponse: LocationIqResponse,
     receivedCoords: GeolocationCoordinates
   ): void {
@@ -123,7 +123,17 @@ export const useMainStore = defineStore('main', () => {
       if (!res.ok) {
         throw new Error(json.message);
       }
-      weather.value = transformWeather(json);
+      const transformedWeather = transformWeather(json);
+      weather.value = transformedWeather;
+      sendMessageToHost('weather.update', {
+        currentWeather: transformedWeather.current,
+        location: {
+          name: location.value,
+          lat: coords.value?.latitude,
+          lon: coords.value?.longitude,
+        },
+        lastUpdated: transformedWeather.lastUpdated,
+      });
     } catch (e) {
       sendMessageToHost(
         'weather.errorNotification',
