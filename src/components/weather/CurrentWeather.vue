@@ -17,8 +17,8 @@ import WeatherIcon from './WeatherIcon.vue';
 const store = useMainStore();
 const today = format(new Date(), TODAY_FORMAT);
 const location = computed(() => store.location);
-const current = computed(() => store.weather.current);
-const daily = computed(() => store.weather.daily);
+const current = computed(() => store.weather!.current);
+const daily = computed(() => store.weather!.daily);
 
 const thresholds = {
   high: HIGH_TEMP_WARNING_THRESHOLD,
@@ -27,7 +27,7 @@ const thresholds = {
 </script>
 
 <template>
-  <CardBase>
+  <CardBase v-if="store.weather">
     <div class="current-weather">
       <header>
         <p>{{ location }}</p>

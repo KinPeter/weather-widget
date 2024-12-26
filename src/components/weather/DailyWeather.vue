@@ -6,11 +6,11 @@ import IconPrecip from '../icons/IconPrecip.vue';
 import WeatherIcon from './WeatherIcon.vue';
 
 const store = useMainStore();
-const daily = computed(() => store.weather.daily.slice(1, store.weather.daily.length - 1));
+const daily = computed(() => store.weather!.daily.slice(1, store.weather!.daily.length - 1));
 </script>
 
 <template>
-  <CardBase>
+  <CardBase v-if="store.weather">
     <div v-for="day of daily" :key="day.date" class="day">
       <div class="day-left">
         <p>{{ day.dayOfWeek }}</p>

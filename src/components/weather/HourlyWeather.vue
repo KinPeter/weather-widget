@@ -6,11 +6,11 @@ import IconPrecip from '../icons/IconPrecip.vue';
 import WeatherIcon from './WeatherIcon.vue';
 
 const store = useMainStore();
-const hourly = computed(() => store.weather.hourly);
+const hourly = computed(() => store.weather!.hourly);
 </script>
 
 <template>
-  <CardBase>
+  <CardBase v-if="store.weather">
     <div class="hourly-wrapper">
       <div v-for="hour of hourly" :key="hour.time" class="hour">
         <p class="time">{{ hour.time }}</p>
