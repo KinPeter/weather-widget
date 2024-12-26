@@ -44,6 +44,15 @@ button {
   color: var(--color-text);
 }
 
+a {
+  text-decoration: none;
+  color: var(--color-text-accent);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 *:focus-visible {
   outline: none;
   box-shadow: var(--focus-box-shadow);

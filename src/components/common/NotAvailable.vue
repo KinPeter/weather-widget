@@ -27,10 +27,12 @@ div {
 
   h1 {
     font-size: 1.2rem;
+    font-weight: normal;
   }
 
   h2 {
     font-size: 0.8rem;
+    font-weight: normal;
   }
 }
 </style>

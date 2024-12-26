@@ -97,20 +97,3 @@ export interface WeatherData {
   main: string;
   icon: string;
 }
-
-export interface LocationIqResponse {
-  address: {
-    village?: string;
-    town?: string;
-    city?: string;
-    district?: string;
-    region?: string;
-    state?: string;
-    country?: string;
-  };
-}
-
-export interface SavedLocationInfo {
-  location: LocationIqResponse;
-  coords: GeolocationCoordinates;
-}

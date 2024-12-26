@@ -1,9 +1,7 @@
-import type { LocationIqResponse, SavedLocationInfo } from './weather.types.ts';
 import { StoreKeys } from './constants.ts';
+import type { Coords, LocationIqReverseResponse, SavedLocationInfo } from './location.types.ts';
 
-export function getSavedLocationForCoords(
-  coords: GeolocationCoordinates
-): LocationIqResponse | null {
+export function getSavedLocationForCoords(coords: Coords): LocationIqReverseResponse | null {
   const savedLocationInfo = localStorage.getItem(StoreKeys.LOCATION);
   if (!savedLocationInfo) return null;
   const { location, coords: savedCoords } = JSON.parse(savedLocationInfo) as SavedLocationInfo;
@@ -11,23 +9,21 @@ export function getSavedLocationForCoords(
 }
 
 export function saveLocationForCoords(
-  location: LocationIqResponse,
-  geoCoords: GeolocationCoordinates
+  location: LocationIqReverseResponse,
+  geoCoords: Coords
 ): void {
-  const coords = { latitude: geoCoords.latitude, longitude: geoCoords.longitude };
+  const coords = { lat: geoCoords.lat, lon: geoCoords.lon };
   localStorage.setItem(StoreKeys.LOCATION, JSON.stringify({ location, coords }));
 }
-
-export type LatLonCoordinates = Pick<GeolocationCoordinates, 'latitude' | 'longitude'>;
 
 /**
  * Returns true if the distance between the two locations is less than 5000 meters
  * @param coordsA Coordinates of location A
  * @param coordsB Coordinates of location B
  */
-export function isSimilarLocation<T extends LatLonCoordinates>(coordsA: T, coordsB: T): boolean {
-  const { latitude: latA, longitude: lonA } = coordsA;
-  const { latitude: latB, longitude: lonB } = coordsB;
+export function isSimilarLocation(coordsA: Coords, coordsB: Coords): boolean {
+  const { lat: latA, lon: lonA } = coordsA;
+  const { lat: latB, lon: lonB } = coordsB;
   return getMetersBetweenLocations(latA, lonA, latB, lonB) < 5000;
 }
 

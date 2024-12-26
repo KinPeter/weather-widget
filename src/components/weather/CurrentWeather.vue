@@ -13,12 +13,17 @@ import IconWind from '../icons/IconWind.vue';
 import IconTempHighWarning from '../icons/IconTempHighWarning.vue';
 import IconTempLowWarning from '../icons/IconTempLowWarning.vue';
 import WeatherIcon from './WeatherIcon.vue';
+import { IconMapPinFilled, IconSettings } from '@tabler/icons-vue';
+import { useRouter } from 'vue-router';
 
 const store = useMainStore();
 const today = format(new Date(), TODAY_FORMAT);
 const location = computed(() => store.location);
 const current = computed(() => store.weather!.current);
 const daily = computed(() => store.weather!.daily);
+
+const router = useRouter();
+const navigateToLocation = () => router.push('/location');
 
 const thresholds = {
   high: HIGH_TEMP_WARNING_THRESHOLD,
@@ -30,7 +35,11 @@ const thresholds = {
   <CardBase v-if="store.weather">
     <div class="current-weather">
       <header>
-        <p>{{ location }}</p>
+        <button @click="navigateToLocation">
+          <span class="pin-icon"><IconMapPinFilled size="14px" /></span>
+          <span class="cog-icon"><IconSettings size="14px" /></span>
+          {{ location }}
+        </button>
         <p>{{ today }}</p>
       </header>
       <main>
@@ -81,8 +90,35 @@ const thresholds = {
     p {
       margin: 0;
     }
-    p:first-child {
+
+    button {
       font-weight: bold;
+
+      .pin-icon,
+      .cog-icon {
+        position: relative;
+        top: 2px;
+      }
+
+      .pin-icon {
+        display: inline;
+      }
+
+      .cog-icon {
+        display: none;
+      }
+
+      &:hover {
+        color: var(--color-primary);
+
+        .pin-icon {
+          display: none;
+        }
+
+        .cog-icon {
+          display: inline;
+        }
+      }
     }
   }
 

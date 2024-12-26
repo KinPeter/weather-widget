@@ -1,4 +1,4 @@
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { useRoute } from 'vue-router';
 
@@ -43,10 +43,6 @@ export const useApiKeysStore = defineStore('apiKeys', () => {
       isInitialized.value = true;
     }, 500);
   }
-
-  watch([weatherApiKey, locationApiKey], () => {
-    console.log('from store:', weatherApiKey.value, locationApiKey.value);
-  });
 
   if (import.meta.env.VITE_LOCATION_API_KEY || import.meta.env.VITE_WEATHER_API_KEY) {
     setApiKeys(import.meta.env.VITE_WEATHER_API_KEY, import.meta.env.VITE_LOCATION_API_KEY);
