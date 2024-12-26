@@ -17,9 +17,13 @@ export const useMainStore = defineStore('main', () => {
   const {
     loading: locationLoading,
     location,
+    originalLocation,
     coords,
     geolocationDisabled,
     getNavigatorGeolocation,
+    searchForLocation,
+    selectOriginalLocation,
+    selectOtherLocation,
   } = useLocations({ locationApiKey, sendMessageToHost });
   const {
     loading: weatherLoading,
@@ -60,5 +64,14 @@ export const useMainStore = defineStore('main', () => {
     );
   }
 
-  return { location, weather, loading, geolocationDisabled };
+  return {
+    location,
+    originalLocation,
+    weather,
+    loading,
+    geolocationDisabled,
+    searchForLocation,
+    selectOriginalLocation,
+    selectOtherLocation,
+  };
 });

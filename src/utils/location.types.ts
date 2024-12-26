@@ -15,6 +15,8 @@ export interface Coords {
   lon: number;
 }
 
+export type LocationIqSearchResponse = LocationIqReverseResponse & Coords;
+
 export interface Location extends Coords {
   name: string;
 }

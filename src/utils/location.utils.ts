@@ -1,5 +1,11 @@
 import { StoreKeys } from './constants.ts';
-import type { Coords, LocationIqReverseResponse, SavedLocationInfo } from './location.types.ts';
+import type {
+  Coords,
+  Location,
+  LocationIqReverseResponse,
+  LocationIqSearchResponse,
+  SavedLocationInfo,
+} from './location.types.ts';
 
 export function getSavedLocationForCoords(coords: Coords): LocationIqReverseResponse | null {
   const savedLocationInfo = localStorage.getItem(StoreKeys.LOCATION);
@@ -49,4 +55,16 @@ export function getMetersBetweenLocations(
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
   return d * 1000; // meters
+}
+
+export function transformResultList(results: LocationIqSearchResponse[]): Location[] {
+  return results.map(({ address, lat, lon }) => {
+    const { city, village, town, state, country } = address;
+    const name = `${city ?? village ?? town}, ${state ? state + ', ' + country : country}`;
+    return {
+      name,
+      lat,
+      lon,
+    };
+  });
 }
