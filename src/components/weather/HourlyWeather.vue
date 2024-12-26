@@ -29,13 +29,14 @@ const hourly = computed(() => store.weather!.hourly);
 .hourly-wrapper {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   width: 100%;
   overflow-x: auto;
 }
 
 .hour {
   text-align: center;
+  min-width: 36px;
 }
 
 p {
