@@ -11,19 +11,19 @@ import HourlyWeather from '../components/weather/HourlyWeather.vue';
 
 const apiKeys = useApiKeysStore();
 const store = useMainStore();
-const { loading, geolocationDisabled } = storeToRefs(store);
+const { loading, geolocationDisabled, weather } = storeToRefs(store);
 </script>
 
 <template>
   <main v-if="loading" class="loading">
     <LoadingIndicator />
   </main>
-  <main v-else-if="apiKeys.status === ApiKeysState.READY && !geolocationDisabled">
+  <main v-else-if="apiKeys.status === ApiKeysState.READY && (weather || !geolocationDisabled)">
     <CurrentWeather />
     <DailyWeather />
     <HourlyWeather />
   </main>
-  <main v-else-if="geolocationDisabled">
+  <main v-else-if="geolocationDisabled && !weather">
     <NoGeolocation />
   </main>
   <main v-else>
